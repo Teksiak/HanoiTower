@@ -25,10 +25,9 @@ class Game(
         val fromStick = state[from]!!
         val toStick = state[to]!!
 
-        if(toStick.isEmpty()) {
-            val block = fromStick.pop()
-            toStick.push(block)
-        } else if(toStick.peek() > fromStick.peek()) {
+        if(toStick.isEmpty() ||
+            toStick.peek() > fromStick.peek()
+        ) {
             val block = fromStick.pop()
             toStick.push(block)
         } else {
