@@ -23,6 +23,14 @@ class GameTest {
     }
 
     @Test
+    fun `try to access stick outside `() {
+        val game = Game()
+        assertFailsWith(NoSuchElementException::class) {
+            game.blocksOnStick(4)
+        }
+    }
+
+    @Test
     fun `Move block to empty stick`() {
         val game = Game()
         game.move(0, 1)
@@ -65,6 +73,15 @@ class GameTest {
 
         assertFailsWith(IllegalStateException::class) {
             game.move(0, 1) // [3] [2, 1] [] - Illegal
+        }
+    }
+
+    @Test
+    fun `Try to move block from empty stick`() {
+        val game = Game()
+
+        assertFailsWith(IllegalStateException::class) {
+            game.move(1, 2)
         }
     }
 }

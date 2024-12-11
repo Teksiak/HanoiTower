@@ -11,7 +11,7 @@ class Game(
 ) {
 
     private val state: Map<Int, Stack<Int>> = buildMap {
-        put(0, Stack((1 .. blocksNum).toList()))
+        put(0, Stack((1..blocksNum).toList()))
         for (i in 1 until sticksNum) {
             put(i, Stack())
         }
@@ -19,13 +19,14 @@ class Game(
 
 
     fun move(from: Int, to: Int) {
-        require(state.containsKey(from) && state.containsKey(to))
-        require(state[from]!!.isNotEmpty())
+        val fromStick = state.getValue(from)
+        val toStick = state.getValue(to)
 
-        val fromStick = state[from]!!
-        val toStick = state[to]!!
+        if (fromStick.isEmpty()) {
+            throw IllegalStateException("Cannot move block from an empty stick")
+        }
 
-        if(toStick.isEmpty() ||
+        if (toStick.isEmpty() ||
             toStick.peek() > fromStick.peek()
         ) {
             val block = fromStick.pop()
@@ -36,7 +37,6 @@ class Game(
     }
 
     fun blocksOnStick(stick: Int): List<Int> {
-        require(state.containsKey(stick))
-        return state[stick]!!.toList()
+        return state.getValue(stick).toList()
     }
 }
