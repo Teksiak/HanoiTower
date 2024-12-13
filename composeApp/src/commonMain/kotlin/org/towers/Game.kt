@@ -17,6 +17,8 @@ class Game(
         }
     }
 
+    private var onGameSolvedListener: OnGameSolvedListener? = null
+
 
     fun move(from: Int, to: Int) {
         val fromStick = state.getValue(from)
@@ -31,12 +33,34 @@ class Game(
         ) {
             val block = fromStick.pop()
             toStick.push(block)
+
+            if(to != 0 && checkIfSolved(toStick)) {
+                onGameSolvedListener?.onSolved()
+            }
         } else {
             throw IllegalStateException("Cannot move a larger block on top of a smaller block")
         }
     }
 
+    private fun checkIfSolved(stick: Stack<Int>): Boolean {
+        return stick.size == blocksNum
+    }
+
+    fun bindOnGameSolvedListener(listener: OnGameSolvedListener) {
+        onGameSolvedListener = listener
+    }
+
+    fun unbindOnGameSolvedListener() {
+        onGameSolvedListener = null
+    }
+
     fun blocksOnStick(stick: Int): List<Int> {
         return state.getValue(stick).toList()
+    }
+
+    companion object {
+        fun interface OnGameSolvedListener {
+            fun onSolved()
+        }
     }
 }

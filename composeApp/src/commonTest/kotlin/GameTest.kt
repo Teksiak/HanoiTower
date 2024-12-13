@@ -23,7 +23,7 @@ class GameTest {
     }
 
     @Test
-    fun `try to access stick outside `() {
+    fun `Try to access stick outside `() {
         val game = Game()
         assertFailsWith(NoSuchElementException::class) {
             game.blocksOnStick(4)
@@ -83,5 +83,34 @@ class GameTest {
         assertFailsWith(IllegalStateException::class) {
             game.move(1, 2)
         }
+    }
+
+    @Test
+    fun `Check if game solved listener is not called for the first stick`() {
+        val game = Game(3, 2)
+        var isSolved = false
+        game.bindOnGameSolvedListener {
+            isSolved = true
+        }
+
+        game.move(0, 1)
+        game.move(1, 0)
+
+        assertEquals(false, isSolved)
+    }
+
+    @Test
+    fun `Test if game solved listener is called when finished`() {
+        val game = Game(3, 2)
+        var isSolved = false
+        game.bindOnGameSolvedListener {
+            isSolved = true
+        }
+
+        game.move(0, 1)
+        game.move(0, 2)
+        game.move(1, 2)
+
+        assertEquals(true, isSolved)
     }
 }
